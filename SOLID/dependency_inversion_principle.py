@@ -55,21 +55,21 @@ class Research:
 # The following classes follow the dependency inversion principle.
 class RelationshipBrowser(ABC):
     @abstractmethod
-    def find_all_children_of(self, name):
+    def find_all_children_of(self, name: str) -> typing.List[str]:
         pass
 
 # This is a low-level module
-class Relationships(list, RelationshipBrowser):
+class Relationships(RelationshipBrowser):
     def __init__(self):
-        super().__init__()
+        self.relations: typing.List[typing.Tuple[Person, Relationship, Person]] = []
 
-    def add_parent_and_child(self, parent, child):
-        self.append((parent, Relationship.PARENT, child))
-        self.append((child, Relationship.CHILD, parent))
+    def add_parent_and_child(self, parent: Person, child: Person):
+        self.relations.append((parent, Relationship.PARENT, child))
+        self.relations.append((child, Relationship.CHILD, parent))
     
-    def find_all_children_of(self, name):
+    def find_all_children_of(self, name: str) -> typing.Iterable[str]:
         relation: typing.Tuple[Person, Relationship, Person]
-        for relation in self:
+        for relation in self.relations:
             if relation[0].name == name and relation[1] == Relationship.PARENT:
                 yield relation[2].name
 
