@@ -20,15 +20,18 @@
 from abc import (ABC, abstractmethod)
 
 # The following classes violates the interface segregation principle.
-class Machine:
+class Machine(ABC):
+    @abstractmethod
     def print_document(self, document: str):
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def fax_document(self, document: str):
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def scan_document(self, document: str):
-        raise NotImplementedError
+        pass
 
 class MultiFunctionPrinter(Machine):
     def print_document(self, document: str):
@@ -77,15 +80,9 @@ class Photocopier(Printer, Scanner):
         print(f"Photocopier is scanning: {document}")
     
 
-# Or you can combine the two classes into one interface
+# Or you can combine the two classes into one multi-function interface
 class MultiFunctionDevice(Printer, Scanner):
-    @abstractmethod
-    def print_document(self, document: str):
-        pass
-
-    @abstractmethod
-    def scan_document(self, document: str):
-        pass
+    pass
 
 class MultiFunctionMachine(MultiFunctionDevice):
     def __init__(self, printer: Printer, scanner: Scanner):
